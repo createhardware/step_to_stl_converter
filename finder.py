@@ -23,10 +23,16 @@ def find_files(folder, pattern):
 
 
 sg.theme("DarkTeal2")
-layout = [[sg.T("")], [sg.Text("Choose a file: "), sg.Input(), sg.FolderBrowse(key="-IN-")],[sg.Button("Submit")]]
+layout = [[sg.T("")], 
+          [sg.Text("Choose a input folder: "), sg.Input(), sg.FolderBrowse(key="-IN-")],
+          [sg.Text("Write a pattern: "), sg.Input(key="-PATTERN-", default_text=pattern), sg.Text('Example: "*1200*.STEP"')],
+          [sg.Text("Choose a output folder: "), sg.Input(), sg.FolderBrowse(key="-OUT-")],
+          [sg.T("")], 
+          [sg.Button("Submit"), sg.Button("Copy files"), sg.Button("Convert to STL")],
+          ]
 
 ###Building Window
-window = sg.Window('My File Browser', layout, size=(600,150))
+window = sg.Window('My File Browser', layout, size=(600,200))
     
 while True:
     event, values = window.read()
@@ -34,6 +40,15 @@ while True:
         break
     elif event == "Submit":
         print(values["-IN-"])
-        blocks = find_files(values["-IN-"], pattern)
+        blocks = find_files(values["-IN-"], values["-PATTERN-"])
         print(blocks.keys())
+        # print(blocks)
+        
+    elif event == "Copy files":
+        pass
+        print("copy files to " + values["-OUT-"] + " , please!")
+    
+    elif event == "Convert to STL":
+        print("TODO: convert files")
+        
         
