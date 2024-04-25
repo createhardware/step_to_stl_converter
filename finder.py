@@ -1,30 +1,39 @@
-# example 1
-#  из минусов - ему нужен путь к папке, но это может не быть проблемой
-# 
 import os
 import glob
 
+import PySimpleGUI as sg
+
+
 work_dir = os.getcwd()
-# print(glob.glob("D:\hard_soft_projects\STEP_to_STL_scrypts\*"))
-print(glob.glob(work_dir + "\\*" ))
+pattern = "*1200*.STEP"
 
-
-# TODO: import pysimplegui
-# find pattern - "1200"
-# output directory
-# add stl convrter?
-
-
-
-
-# import os
- 
-for root, dirs, files in os.walk(work_dir):
-    for file in files:
-        if file.endswith('.STEP'):
-            # print(os.path.join(root, file))
-            if glob.fnmatch.fnmatch(file, "*1200*.STEP"):
-                print(file)
-                print(os.path.join(root, file))
+def find_files(folder, pattern):
+    out = dict()
+    for root, dirs, files in os.walk(folder):
+        for file in files:
+            # if file.endswith('.STEP'):
+            #     # print(os.path.join(root, file))
+            if glob.fnmatch.fnmatch(file, pattern):
+                # print(file)
+                # print(os.path.join(root, file))
+                out[file] = os.path.join(root, file)
+    return out
                 
                 
+
+
+sg.theme("DarkTeal2")
+layout = [[sg.T("")], [sg.Text("Choose a file: "), sg.Input(), sg.FolderBrowse(key="-IN-")],[sg.Button("Submit")]]
+
+###Building Window
+window = sg.Window('My File Browser', layout, size=(600,150))
+    
+while True:
+    event, values = window.read()
+    if event == sg.WIN_CLOSED or event=="Exit":
+        break
+    elif event == "Submit":
+        print(values["-IN-"])
+        blocks = find_files(values["-IN-"], pattern)
+        print(blocks.keys())
+        
